@@ -1,28 +1,38 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { addTodo } from './action';
+
 import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
+  add = () => {
+    let todo = document.getElementById('todo').value;
+    this.props.addTodo(todo);
+  };
+
   render() {
+    console.log('todos', this.props.todos);
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <div>
+        <input type="text" id="todo" />
+        <button onClick={this.add}> Add </button>
+
+        {this.props.todos.map(todo => (
+          <div> {todo} </div>
+        ))}
       </div>
     );
   }
 }
 
-export default App;
+const mapStateToProps = state => ({
+  todos: state.todos
+});
+
+export default connect(
+  mapStateToProps,
+  {
+    addTodo
+  }
+)(App);
